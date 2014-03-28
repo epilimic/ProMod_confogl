@@ -1,6 +1,6 @@
 This is the repo for the current version of ProMod that runs on confogl. The current version is 3.6. You're welcome to try anything from the Beta branch, just know that it may not be reliable until it is moved into the main branch. Beta changelog can be found at the bottom of this readme.
 
-Pro Mod:
+#Pro Mod:
 - Removed or replaced all HR's in Pro Mod. (Pro Mod HR now has a seperate stripper folder.)
 - Replaced all tier2_any and any_primary spawns with tier1_any.
 - Removed another pill from Hard Rain Finale diner. (There are now 2 total inside)
@@ -51,7 +51,7 @@ Pro Mod:
 - Added holdout bonus for c11m2. 60 Points
 - Removed logger plugin until we move the database to a new server.
 
-Retro:
+#Retro:
 - Completely removed water slowdown. (Even with confogls water slowdown disabled, there was a 10% slow from vanilla. This has been removed.)
 - Changed all map distances to 100.
 - Disabled custom max distance prints.
@@ -75,7 +75,7 @@ Retro:
 - Smoker godframes decreased to 0.1 seconds.
 - Survivors will be godframed from common damage for 2 seconds while getting up from a hunter pounce.
 
-Reflux:
+#Reflux:
 - Removed spitters.
 - Quad caps enabled.
 - Hunter limit increased to 2.
@@ -87,6 +87,6 @@ Reflux:
 - Copies Retro Stripper folder.
 
 
-Beta:
-ABABA team order
-Reduce water slowdown by 10% while tank is alive.
+#Beta:
+- ABABA team order
+- Reduce water slowdown by 10% while tank is alive.
