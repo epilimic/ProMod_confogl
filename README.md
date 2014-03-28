@@ -1,4 +1,6 @@
-This is the repo for the current version of ProMod that runs on confogl. The current version is ##3.6. You're welcome to try anything from the Beta branch, just know that it may not be reliable until it is moved into the main branch. Beta changelog can be found at the bottom of this readme.
+This is the repo for the current version of ProMod that runs on confogl. The current version is **3.6**. 
+
+You're welcome to try anything from the Beta branch, just know that it may not be reliable until it is moved into the main branch. Beta changelog can be found at the bottom of this readme.
 
 #Pro Mod:
 - Removed or replaced all HR's in Pro Mod. (Pro Mod HR now has a seperate stripper folder.)
