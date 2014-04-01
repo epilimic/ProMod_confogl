@@ -3,7 +3,6 @@
 #include <sourcemod>
 #include <sdktools>
 #include <left4downtown>
-#include <colors>
 #undef REQUIRE_PLUGIN
 #include <l4d2lib>
 #define REQUIRE_PLUGIN
@@ -259,7 +258,7 @@ public Action:SM_RoundEnd_Event(Handle:event, const String:name[], bool:dontBroa
 		
 		// If the score is nonzero, trust the SurvivalBonus var.
 		SM_iFirstScore = (SM_iFirstScore ? GetConVarInt(SM_hSurvivalBonus) *iAliveCount : 0);
-		CPrintToChatAll("{default}Round {olive}1 {default}Bonus: {lightgreen}%d{default}", SM_iFirstScore);
+		PrintToChatAll("\x01Round \x051 \x01Bonus: \x03%d", SM_iFirstScore);
 	}
 	else if (SM_bIsSecondRoundStarted && !SM_bIsSecondRoundOver)
 	{
@@ -270,11 +269,11 @@ public Action:SM_RoundEnd_Event(Handle:event, const String:name[], bool:dontBroa
 		new iScore = RoundToFloor(SM_CalculateAvgHealth(iAliveCount) * SM_fMapMulti * SM_fHBRatio + 400 * SM_fMapMulti * SM_fSurvivalBonusRatio);
 		// If the score is nonzero, trust the SurvivalBonus var.
 		iScore = iScore ? GetConVarInt(SM_hSurvivalBonus) * iAliveCount : 0; 
-		CPrintToChatAll("{default}Round {olive}1 {default}Bonus: {lightgreen}%d", SM_iFirstScore);
-		CPrintToChatAll("{default}Round {olive}2 {default}Bonus: {lightgreen}%d", iScore);
+		PrintToChatAll("\x01Round \x051 \x01Bonus: \x03%d", SM_iFirstScore);
+		PrintToChatAll("\x01Round \x052 \x01Bonus: \x03%d", iScore);
 		iDifference = SM_iFirstScore - iScore;
 		if (iScore > SM_iFirstScore) iDifference = (~iDifference) + 1;
-		CPrintToChatAll("{default}Difference: {green}%d", iDifference);
+		PrintToChatAll("\x01Difference: \x04%d", iDifference);
 	}
 }
 public Action:SM_RoundStart_Event(Handle:event, const String:name[], bool:dontBroadcast)
@@ -309,9 +308,9 @@ public Action:SM_Cmd_Health(client, args)
     {
 		iDifference = SM_iFirstScore - iScore;
 		if (iScore > SM_iFirstScore) iDifference = (~iDifference) + 1;
-		CPrintToChat(client, "{default}Round {olive}1 {default}Bonus: {lightgreen}%d{default} {olive}({default}Difference: {green}%d{olive})", SM_iFirstScore, iDifference);
+		PrintToChat(client, "\x01Round \x051 \x01Bonus: \x03%d\x01 \x05(\x01Difference: \x04%d\x05)", SM_iFirstScore, iDifference);
 	}
-	if (client)	CPrintToChat(client, "{default}Average Health: {lightgreen}%.02f", fAvgHealth);
+	if (client)	PrintToChat(client, "\x01Average Health: \x03%.02f", fAvgHealth);
 	else PrintToServer("[ScoreMod] Average Health: %.02f", fAvgHealth);
 	
 	
@@ -321,8 +320,8 @@ public Action:SM_Cmd_Health(client, args)
 	
 	if (client)
 	{
-		CPrintToChat(client, "{default}Health Bonus: {lightgreen}%d{default}", iScore );
-		if (SM_fSurvivalBonusRatio != 0.0) CPrintToChat(client, "{default}Static Survival Bonus Per Survivor: {olive}%d{default}", RoundToFloor(400 * SM_fMapMulti * SM_fSurvivalBonusRatio));
+		PrintToChat(client, "\x01Health Bonus: \x03%d\x01", iScore );
+		if (SM_fSurvivalBonusRatio != 0.0) PrintToChat(client, "\x01Static Survival Bonus Per Survivor: \x05%d", RoundToFloor(400 * SM_fMapMulti * SM_fSurvivalBonusRatio));
 	}
 	else
 	{
@@ -333,7 +332,7 @@ public Action:SM_Cmd_Health(client, args)
 	{
 	if (GetConVarBool(SM_hCustomMaxDistance) && GetCustomMapMaxScore() > -1) {
 		if (client) {
-			CPrintToChat(client, "{default}Custom Max Distance: {olive}%d{default}", GetCustomMapMaxScore());
+			PrintToChat(client, "\x01Custom Max Distance: \x05%d", GetCustomMapMaxScore());
 		}
 		else {
 			PrintToServer("[ScoreMod] Custom Max Distance: %d", GetCustomMapMaxScore());
