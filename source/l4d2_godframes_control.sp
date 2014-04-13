@@ -11,8 +11,10 @@
 #include <sdkhooks>
 #include <left4downtown>
 #include <l4d2_direct>
+#include <l4d2util>
 
 #define CLASSNAME_LENGTH 64
+
 
 //cvars
 new Handle: hRageRock = INVALID_HANDLE;
@@ -28,6 +30,7 @@ new Handle: hJockey = INVALID_HANDLE;
 new Handle: hCharger = INVALID_HANDLE;
 new Handle: hSpitFlags = INVALID_HANDLE;
 new Handle: hCommonFlags = INVALID_HANDLE;
+new Handle: hGodframeGlows = INVALID_HANDLE;
 
 //fake godframes
 new Float: fFakeGodframeEnd[MAXPLAYERS + 1];
@@ -39,13 +42,16 @@ new frustrationOffset[MAXPLAYERS + 1];
 public Plugin:myinfo =
 {
 	name = "L4D2 Godframes Control (starring Austin Powers, Baby Yeah!)",
-	author = "Stabby, CircleSquared",
-	version = "0.2.4",
+	author = "Stabby, CircleSquared, Tabun",
+	version = "0.3.1b",
 	description = "Allows for control of what gets godframed and what doesnt."
 };
 
 public OnPluginStart()
 {
+	hGodframeGlows = CreateConVar("gfc_godframe_glows", "0",
+									"Changes the rendering of survivors while godframed (red/transparent).",
+									FCVAR_PLUGIN, true, 0.0, true, 1.0 );
 	hRageHittables = CreateConVar("gfc_hittable_rage_override", "0",
 									"Allow tank to gain rage from hittable hits. 0 blocks rage gain.",
 									FCVAR_PLUGIN, true, 0.0, true, 1.0 );
@@ -90,10 +96,9 @@ public OnPluginStart()
 	HookEvent("pounce_end", PostSurvivorRelease);
 	HookEvent("jockey_ride_end", PostSurvivorRelease);
 	HookEvent("charger_pummel_end", PostSurvivorRelease);
-	HookEvent("round_start", OnRoundStart);
 }
 
-public OnRoundStart(Handle:event, const String:name[], bool:dontBroadcast)
+public OnRoundStart()
 {
 	for (new i = 1; i <= MaxClients; i++) //clear both fake and real just because
 	{
@@ -112,25 +117,28 @@ public PostSurvivorRelease(Handle:event, const String:name[], bool:dontBroadcast
 	{
 		fFakeGodframeEnd[victim] = GetGameTime() + GetConVarFloat(hSmoker);
 		iLastSI[victim] = 2;
-		return;
-	}
+	} else
 	if (StrContains(name, "pounce") != -1)
 	{
 		fFakeGodframeEnd[victim] = GetGameTime() + GetConVarFloat(hHunter);
 		iLastSI[victim] = 1;
-		return;
-	}
+	} else
 	if (StrContains(name, "jockey") != -1)
 	{
 		fFakeGodframeEnd[victim] = GetGameTime() + GetConVarFloat(hJockey);
 		iLastSI[victim] = 4;
-		return;
-	}
+	} else
 	if (StrContains(name, "charger") != -1)
 	{
 		fFakeGodframeEnd[victim] = GetGameTime() + GetConVarFloat(hCharger);
 		iLastSI[victim] = 8;
 	}
+	
+	if (fFakeGodframeEnd[victim] > GetGameTime() && GetConVarBool(hGodframeGlows)) {
+		SetGodframedGlow(victim);
+		CreateTimer(fFakeGodframeEnd[victim] - GetGameTime(), Timed_ResetGlow, victim);
+	}
+	
 	return;
 }
 
@@ -231,4 +239,28 @@ stock IsClientAndInGame(client)
 	return false;
 }
 
+public Action:Timed_ResetGlow(Handle:timer, any:client) {
+	ResetGlow(client);
+}
 
+ResetGlow(client) {
+	if (IsClientAndInGame(client)) {
+		// remove transparency/color
+		SetEntityRenderMode(client, RenderMode:0);
+		SetEntityRenderColor(client, 255,255,255,255);
+	}
+}
+
+SetGodframedGlow(client) {	//there might be issues with realism
+	if (IsClientAndInGame(client) && IsPlayerAlive(client) && GetClientTeam(client) == 2) {
+		// make player transparent/red while godframed
+		SetEntityRenderMode( client, RenderMode:3 );
+		SetEntityRenderColor (client, 255,0,0,200 );
+	}
+}
+
+public OnMapStart() {
+	for (new i = 0; i <= MaxClients; i++) {
+		ResetGlow(i);
+	}
+}

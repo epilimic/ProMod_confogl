@@ -160,7 +160,6 @@
         "start_dist"        "50.000000"
         "start_extra_dist"  "200.000000"
         "end_dist"          "300.000000"
-        "max_distance"      "700"
         "tank_ban_flow_min" "20"
         "tank_ban_flow_max" "35"
     }
@@ -180,7 +179,7 @@
         "start_dist"        "50.000000"
         "start_extra_dist"  "350.000000"
         "end_dist"          "100.000000"
-		"max_distance"      "700"
+	"max_distance"      "600"
         "ItemLimits"
         {
             "pain_pills"    "0"
